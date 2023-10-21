@@ -18,22 +18,12 @@ namespace API.Repositories
 
         public async Task<IEnumerable<Role>> GetRoles() => await Task.Run(() => _context.Roles);
 
-        public async Task<Role> GetRoleById(int id) => await _context.Roles.FirstOrDefaultAsync(x => x.RoleId == id);
-    
-        public async Task<int> GetRoleIdByName(string name) => await Task.Run(() => {
-            Role role = _context.Roles.Where(x => x.Name == name).FirstOrDefault();
-            if(role is not null)
-            {
-                return role.RoleId;
-            }
-            else
-            {
-                return -1;
-            }
-            
-            }) ;
+        public async Task<Role?> GetRoleWithName(string name) => await _context.Roles.Where(x => x.Name == name).FirstOrDefaultAsync();
 
-        public async Task AddRole(Role role) => await Task.Run(() => {
+        public async Task<Role?> GetRoleWithId(int id) => await _context.Roles.Where(x => x.RoleId == id).FirstOrDefaultAsync();
+
+        public async Task AddRole(Role role) => await Task.Run(() =>
+        {
             _context.Roles.Add(role);
             _context.SaveChanges();
         });
@@ -50,16 +40,9 @@ namespace API.Repositories
             _context.SaveChanges();
         });
 
-        public async Task<IEnumerable<User>> GetUsersInRole(Role role) => await Task.Run(() => role.Users);
-        public async Task AddUserToRole(User user, Role role) => await Task.Run(() => {
-            role.Users.Add(user);
-            _context.SaveChanges();
-        });
 
-        public async Task RemoveUserToRole(User user, Role role) => await Task.Run(() => {
-            role.Users.Remove(user);
-            _context.SaveChanges();
-        });
+
+
 
 
 

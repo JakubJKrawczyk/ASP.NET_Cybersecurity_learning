@@ -20,8 +20,9 @@ namespace API.DataManager
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                .HasMany(e => e.Roles)
-                .WithMany(e => e.Users);
+                .HasMany(e => e.Roles);
+
+
         }
     }
 }
