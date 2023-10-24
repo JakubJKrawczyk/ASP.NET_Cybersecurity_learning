@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FrontApp.Views.AdminView">
+    <ContentPage.Content>
+        <VerticalStackLayout Spacing="20" HorizontalOptions="Center" VerticalOptions="Center">
+            <Label Text="Welcome Admin!" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15"/>
+            <Button
+                Text="Zmień swoje hasło"
+                Clicked="ToChangeAdminPassword"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                />
+            <Button
+                Text="Użytkownicy"
+                Clicked="ToUsersList"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                />
+            <Button
+                Text="Ograniczenia hasła"
+                Clicked="ToPasswordRequirements"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                />
+        </VerticalStackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

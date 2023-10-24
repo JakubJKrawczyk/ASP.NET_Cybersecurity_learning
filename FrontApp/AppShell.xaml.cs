@@ -1,4 +1,5 @@
-﻿using FrontApp.Views;
+﻿using FrontApp.Handlers;
+using FrontApp.Views;
 
 namespace FrontApp;
 
@@ -8,7 +9,8 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
         
-        Routing.RegisterRoute("login", typeof(LoginView));
-        Routing.RegisterRoute("main", typeof(MainPage));
+        
     }
+
+    
 }

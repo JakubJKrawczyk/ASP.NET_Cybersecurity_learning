@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FrontApp.Views.User.UserCRUDViews.ModifyUserView">
+    <ContentPage.Content>
+        <VerticalStackLayout Spacing="20" HorizontalOptions="Center" VerticalOptions="Center">
+            <Label
+                HorizontalOptions="Center" VerticalOptions="Center"
+                Text="Login: "
+                />
+            <Entry
+                HorizontalOptions="Center" VerticalOptions="Center"
+                x:Name="LoginEntry"
+                WidthRequest="150"
+            />
+            <Label
+                HorizontalOptions="Center" VerticalOptions="Center"
+                Text="Password: "
+            />
+            <Button
+                Clicked="ShowChangeUserPassword"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Text="Change user password"
+                x:Name="ShowPasswordEntriesBtn"
+                WidthRequest="250"
+            />
+            
+            <Entry
+                HorizontalOptions="Center" VerticalOptions="Center"
+                x:Name="NewPasswordEntry"
+                IsVisible="False"
+                Placeholder="New Password"
+                WidthRequest="150"
+            />
+            
+            <Entry
+                HorizontalOptions="Center" VerticalOptions="Center"
+                x:Name="RepeatNewPasswordEntry"
+                IsVisible="False"
+                Placeholder="Repeat password"
+                WidthRequest="150"
+            />
+            <Label
+                HorizontalOptions="Center" VerticalOptions="Center"
+                Text="First Login: "
+            />
+            <HorizontalStackLayout>
+                <Label 
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    x:Name="FirstLoginLabel"
+                />
+                <CheckBox
+                    x:Name="FirstLoginCheckBox"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                />
+            </HorizontalStackLayout>
+            
+            
+            <Button
+                Text="Modify User"
+                Clicked="ModifyUser"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                />
+        </VerticalStackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>

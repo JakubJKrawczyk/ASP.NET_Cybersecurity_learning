@@ -3,6 +3,7 @@ using System;
 using API.DataManager;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20231022142408_RoleRepair")]
+    partial class RoleRepair
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,9 +43,6 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("FirstLogin")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -51,15 +51,12 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("PasswordExpirationDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("UserRoleRoleId")
                         .HasColumnType("int");
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("UserRoleRoleId");
 
                     b.ToTable("Users");
                 });
@@ -67,17 +64,10 @@ namespace API.Migrations
             modelBuilder.Entity("Entities.DataModels.User", b =>
                 {
                     b.HasOne("Entities.DataModels.Role", "UserRole")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("UserRoleRoleId");
 
                     b.Navigation("UserRole");
-                });
-
-            modelBuilder.Entity("Entities.DataModels.Role", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

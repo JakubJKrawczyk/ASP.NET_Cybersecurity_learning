@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FrontApp.Views.User.UserCRUDViews.DetailUserView">
+    <ContentPage.Content>
+        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
+                <Label
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    x:Name="LoginLabel"
+                />
+                <Label
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    x:Name="PasswordLabel"
+                />
+                <Label 
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    x:Name="FirstLoginLabel"
+                />
+                <Label 
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    x:Name="PasswordExpiresLabel"
+                />
+                <Label 
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    x:Name="RoleLabel"
+                />
+            <Button HorizontalOptions="Center" VerticalOptions="Center"
+                    Text="Modify User"
+                    Clicked="ToModifyUser"
+                    />
+                <Button HorizontalOptions="Center" VerticalOptions="Center"
+                        Text="Delete User"
+                        Clicked="DeleteUser"
+                />
+                
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -10,7 +10,7 @@ namespace API.DataManager
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
 
-        string ConnString = "Server=127.0.0.1; User ID=root; Password=root1234567890; Database=cybersecurity";
+        string ConnString = "Server=127.0.0.1; User ID=root; Password=1234567890; Database=cybersecurity";
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -19,8 +19,14 @@ namespace API.DataManager
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasMany(e => e.Roles);
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.HasKey(z => z.RoleId);
+                entity.HasMany(a => a.Users)
+                    .WithOne(a => a.UserRole)
+                    .HasForeignKey(e => e.RoleId)
+                    .IsRequired();
+            });
 
 
         }

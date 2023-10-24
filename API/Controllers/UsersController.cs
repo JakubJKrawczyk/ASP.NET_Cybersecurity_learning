@@ -28,9 +28,11 @@ namespace API.Controllers
             if (id is not null)
             {
                 User? authUser = await _repo.GetUserWithId((int)id);
+                Console.WriteLine(authUser.RoleId);
                 if (authUser is not null)
                 {
-                    if (SecuritySystem.CheckIfUserHasRole(authUser, "Administrator"))
+                    Role role = await _roleRepository.GetRoleWithId(authUser.RoleId);
+                    if (SecuritySystem.CheckIfUserHasRole(role, "Administrator"))
                     {
 
                         return Ok(await _repo.GetUsers());
@@ -52,9 +54,8 @@ namespace API.Controllers
                 User? authenticateUser = await _repo.GetUserWithId((int)id);
                 if (authenticateUser is not null)
                 {
-                    if (SecuritySystem.CheckIfUserHasRole(authenticateUser, "Administrator"))
+                    if (authenticateUser.Login == login)
                     {
-
                         User? user = await _repo.GetUserWithLogin(login);
                         if (user is not null)
                         {
@@ -66,7 +67,26 @@ namespace API.Controllers
 
                         }
                     }
-                    else return StatusCode(StatusCodes.Status403Forbidden);
+                    else
+                    {
+                        Role role = await _roleRepository.GetRoleWithId(authenticateUser.RoleId);
+                        if (SecuritySystem.CheckIfUserHasRole(role, "Administrator"))
+                        {
+
+                            User? user = await _repo.GetUserWithLogin(login);
+                            if (user is not null)
+                            {
+                                return Ok(user);
+                            }
+                            else
+                            {
+                                return NotFound(login);
+
+                            }
+                        }
+                        else return StatusCode(StatusCodes.Status403Forbidden);
+                    }
+                   
                 }
                 else return NotFound(id);
             }
@@ -84,10 +104,39 @@ namespace API.Controllers
                 User? authUser = await _repo.GetUserWithId((int)id);
                 if (authUser is not null)
                 {
-                    if (SecuritySystem.CheckIfUserHasRole(authUser, "Administrator"))
+                    Role role = await _roleRepository.GetRoleWithId(authUser.RoleId);
+                    if (SecuritySystem.CheckIfUserHasRole(role, "Administrator"))
                     {
 
-                        await _repo.AdduserAsync(new User() { Login = login, Password = password });
+                        await _repo.AdduserAsync(new User() { Login = login, Password = password , RoleId = 2, FirstLogin = true, PasswordExpirationDate = DateTime.Now + TimeSpan.FromDays(30)});
+                        return Ok();
+
+                    }
+                    else return StatusCode(StatusCodes.Status403Forbidden);
+                }
+                else return NotFound(id);
+            }
+            else return BadRequest();
+
+        }
+        [HttpPut("user")]
+        public async Task<IActionResult> UpdateUser([FromQuery] string login, [FromQuery] string password, [FromQuery] bool firstLogin, [FromQuery] DateTime expirationDate,  [FromQuery] string token)
+        {
+            int? id = SecuritySystem.ValidateToken(token);
+            if (id is not null)
+            {
+                User? authUser = await _repo.GetUserWithId((int)id);
+                if (authUser is not null)
+                {
+                    Role role = await _roleRepository.GetRoleWithId(authUser.RoleId);
+                    if (SecuritySystem.CheckIfUserHasRole(role, "Administrator") || SecuritySystem.CheckIfUserHasRole(role, "User"))
+                    {
+                        User newUser = await _repo.GetUserWithLogin(login);
+                        newUser.Login = login;
+                        newUser.Password = password;
+                        newUser.FirstLogin = firstLogin;
+                        newUser.PasswordExpirationDate = expirationDate;
+                        await _repo.Updateuser(newUser);
                         return Ok();
 
                     }
@@ -99,7 +148,6 @@ namespace API.Controllers
 
         }
 
-
         [HttpPut("user/{login}/groups")]
         public async Task<IActionResult> AddRoleToUser(string login, [FromQuery] string roleName, [FromQuery] string token)
         {
@@ -109,7 +157,8 @@ namespace API.Controllers
                 User? requestUser = await _repo.GetUserWithId((int)id);
                 if (requestUser is not null)
                 {
-                    if (SecuritySystem.CheckIfUserHasRole(requestUser, "Administrator"))
+                    Role authRole = await _roleRepository.GetRoleWithId(requestUser.RoleId);
+                    if (SecuritySystem.CheckIfUserHasRole(authRole, "Administrator"))
                     {
 
                         User? user = await _repo.GetUserWithLogin(login);
@@ -120,7 +169,7 @@ namespace API.Controllers
                             Role? role = await _roleRepository.GetRoleWithName(roleName);
                             if (role is not null)
                             {
-                                await _repo.AddRoleToUser(user, role);
+                                await _repo.AddUserToRole(user, role);
                                 return Ok();
 
                             }
@@ -149,9 +198,11 @@ namespace API.Controllers
                 User? user = await _repo.GetUserWithId((int)id);
                 if (user is not null)
                 {
-                    if (SecuritySystem.CheckIfUserHasRole(user, "Administrator"))
+                    Role authRole = await _roleRepository.GetRoleWithId(user.RoleId);
+                    if (SecuritySystem.CheckIfUserHasRole(authRole, "Administrator"))
                     {
-                        await _repo.Deleteuser(user);
+                        User userToDelete = await _repo.GetUserWithLogin(login);
+                        await _repo.Deleteuser(userToDelete);
                         return Ok(user);
 
                     }
@@ -195,8 +246,8 @@ namespace API.Controllers
             }
 
         }
-        [HttpPost("privileges")]
-        public async Task<IActionResult> CheckPrivileges([FromQuery] string token, [FromQuery] string role)
+        [HttpGet("privileges")]
+        public async Task<IActionResult> CheckPrivileges([FromQuery] string token)
         {
             int? id = SecuritySystem.ValidateToken(token);
             if (id is not null)
@@ -204,11 +255,10 @@ namespace API.Controllers
                 User? user = await _repo.GetUserWithId((int)id);
                 if (user is not null)
                 {
-                    if (SecuritySystem.CheckIfUserHasRole(user, role))
-                    {
-                        return Ok(role);
-                    }
-                    else return StatusCode(StatusCodes.Status403Forbidden);
+                    Role authRole = await _roleRepository.GetRoleWithId(user.RoleId);
+                    
+                        return Ok(authRole.Name);
+                    
                 }
                 else return NotFound(id);
             }

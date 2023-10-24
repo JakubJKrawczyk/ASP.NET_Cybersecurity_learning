@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dataModels="clr-namespace:Entities.DataModels;assembly=Entities"
+             x:Class="FrontApp.Views.Admin.UsersListView"
+             NavigatedTo="RefreshUsersList">
+    <ContentPage.Content>
+        <Grid HorizontalOptions="Center" VerticalOptions="Center" x:Name="UsersGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <ListView HorizontalOptions="Center"
+                      VerticalOptions="Center"
+                      x:Name="UsersList"
+                      SelectionMode="Single"
+                      HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="dataModels:User">
+                        <ViewCell Tapped="ToUserDetails">
+                            <StackLayout>
+                                <Label
+                                    Text="{Binding Login}"
+                                    FontSize="25"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+            <Button Grid.Row="1"
+                Text="Add User"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Clicked="ToAddUser"
+                Margin="0,15,0,0 "
+                />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

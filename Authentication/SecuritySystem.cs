@@ -13,20 +13,21 @@ namespace Authentication
 {
     public class SecuritySystem
     {
-        private static string secretKey = "!6)8@000";
+        
         public static int? ValidateToken(string token)
         {
             if (token == null)
                 return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secretKey);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("KEY") ?? throw new InvalidOperationException()));
+            
             try
             {
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    IssuerSigningKey = key,
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
@@ -48,8 +49,9 @@ namespace Authentication
         public static string GenerateJwtToken(User user)
         {
             // generate token that is valid for 15 minutes
+            
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secretKey);
+            var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("KEY") ?? throw new InvalidOperationException());
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.UserId.ToString()) }),
@@ -60,9 +62,9 @@ namespace Authentication
             return tokenHandler.WriteToken(token);
         }
 
-        public static bool CheckIfUserHasRole(User user, string role) => user.Roles.FirstOrDefault(x => x.Name == role) is not null;
+        public static bool CheckIfUserHasRole(Role userRole, string role) => userRole.Name == role;
 
     }
-
+ 
 
 }

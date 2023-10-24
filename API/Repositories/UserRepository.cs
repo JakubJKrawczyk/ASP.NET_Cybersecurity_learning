@@ -17,17 +17,18 @@ namespace API.Repositories
         public async Task<User?> GetUserWithLogin(string login) => await _context.Users.Where(x => x.Login == login).FirstOrDefaultAsync();
 
         public async Task<User?> GetUserWithId(int id) => await _context.Users.Where(x => x.UserId == id).FirstOrDefaultAsync();
-        public async Task<IEnumerable<Role>> GetUserRoles(string login) => _context.Users.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Login == login).Result.Roles;
-        public async Task AddRoleToUser(User user, Role role)
+
+        public async Task<Role?> GetUserRole(string login) => _context.Users.Where(u => u.Login == login).FirstOrDefault()?.UserRole;
+        public async Task AddUserToRole(User user, Role role)
         {
-            user.Roles.Add(role);
+            user.UserRole = role;
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveRoleFromUser(User user, Role role) => await Task.Run(() =>
+        public async Task RemoveUserFromRole(User user, Role role) => await Task.Run(() =>
         {
 
-            user.Roles.Remove(role);
+            user.UserRole = null;
             _context.SaveChanges();
         });
 
@@ -35,7 +36,7 @@ namespace API.Repositories
         public async Task<bool?> CheckifUserInRole(User user, Role role) => await Task.Run(() =>
         {
 
-            if (user.Roles.Where(r => r.RoleId == role.RoleId).Any())
+            if (user.UserRole.Name == role.Name)
             {
                 return true;
             }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FrontApp.Views.UserView">
+    <ContentPage.Content>
+        <VerticalStackLayout Spacing="20" HorizontalOptions="Center" VerticalOptions="Center">
+            <Label Text="Welcome User!" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15"></Label>
+            <Button
+                Text="Change My Password"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Clicked="ToChangeMyPassword"
+                ></Button>
+            
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

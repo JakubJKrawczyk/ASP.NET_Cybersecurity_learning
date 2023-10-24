@@ -13,7 +13,7 @@
 
         <!-- Display name -->
         <ApplicationTitle>FrontApp</ApplicationTitle>
-
+        <WindowsPackageType>None</WindowsPackageType>
         <!-- App Identifier -->
         <ApplicationId>com.companyname.frontapp</ApplicationId>
         <ApplicationIdGuid>84403E3C-D7B8-4AFC-B699-24DC43F6F0B5</ApplicationIdGuid>
@@ -50,6 +50,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -59,6 +60,15 @@
       <MauiXaml Update="Views\LoginView.xaml">
         <SubType>Designer</SubType>
       </MauiXaml>
+      <MauiXaml Update="Views\Admin\AdminView.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Views\User\UserView.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Views\User\ResetPasswordView.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
     </ItemGroup>
 
     <ItemGroup>
@@ -66,6 +76,22 @@
         <DependentUpon>LoginView.xaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Views\Admin\AdminView.xaml.cs">
+        <DependentUpon>AdminView.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\User\UserView.xaml.cs">
+        <DependentUpon>UserView.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Views\User\ResetPasswordView.xaml.cs">
+        <DependentUpon>ResetPasswordView.xaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Entities\Entities.csproj" />
     </ItemGroup>
 
 </Project>
